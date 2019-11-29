@@ -1,9 +1,10 @@
 ## Multi-environment scalable microservices system with centralized logging
 
-Ngingx to route all the incoming trafic.  
-Frontend and backend application with minimal codebase to demonstate application logging.  
-EFK stack for collecting, storing and visualizing logs.  
+Ngingx to route all the incoming trafic.
+Frontend and backend application with minimal codebase to demonstate application logging.
+EFK stack for collecting, storing and visualizing logs.
 
+![Infra diagram](infra-diagram.png)
 
 
 ## Environment
@@ -61,6 +62,6 @@ Follow the [documentation](https://www.elastic.co/guide/en/kibana/6.3/tutorial-d
 
 Access the services on your local machine
 
-http://development.central.demo  
-http://staging.central.demo   
-http://kibana.central.demo  
+http://development.central.demo
+http://staging.central.demo
+http://kibana.central.demo
