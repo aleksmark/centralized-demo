@@ -1,0 +1,126 @@
+version: '3'
+
+services:
+    app-gateway:
+        image: nginx
+        restart: always
+        ports:
+            - "80:80"
+        depends_on:
+            - fluentd
+            - frontend-development
+            - frontend-staging
+            - kibana
+        volumes:
+            - ./app-gateway/config/nginx.conf:/etc/nginx/nginx.conf
+        logging:
+            driver: fluentd
+            options:
+                fluentd-address: localhost:24224
+                fluentd-async-connect: 'true'
+                fluentd-retry-wait: '1s'
+                fluentd-max-retries: '30'
+                tag: centraldemo.app_gateway
+    frontend-development:
+        build:
+            context: ./frontend
+        restart: always
+        environment:
+            ENV: development
+            APP: frontend
+            BACKEND_HOST: backend-development
+            BACKEND_PORT: 80
+        depends_on:
+            - fluentd
+            - backend-development
+        logging:
+            driver: fluentd
+            options:
+                fluentd-address: localhost:24224
+                fluentd-async-connect: 'true'
+                fluentd-retry-wait: '1s'
+                fluentd-max-retries: '30'
+                tag: centraldemo.frontend.development
+    backend-development:
+        build:
+            context: ./backend
+        restart: always
+        environment:
+            ENV: development
+            APP: backend
+        depends_on:
+            - fluentd
+        logging:
+            driver: fluentd
+            options:
+                fluentd-address: localhost:24224
+                fluentd-async-connect: 'true'
+                fluentd-retry-wait: '1s'
+                fluentd-max-retries: '30'
+                tag: centraldemo.backend.development
+    frontend-staging:
+        build:
+            context: ./frontend
+        restart: always
+        environment:
+            ENV: staging
+            APP: frontend
+            BACKEND_HOST: backend-staging
+            BACKEND_PORT: 80
+        depends_on:
+            - fluentd
+            - backend-staging
+        logging:
+            driver: fluentd
+            options:
+                fluentd-address: localhost:24224
+                fluentd-async-connect: 'true'
+                fluentd-retry-wait: '1s'
+                fluentd-max-retries: '30'
+                tag: centraldemo.frontend.staging
+    backend-staging:
+        build:
+            context: ./backend
+        restart: always
+        environment:
+            ENV: staging
+            APP: backend
+        depends_on:
+            - fluentd
+        logging:
+            driver: fluentd
+            options:
+                fluentd-address: localhost:24224
+                fluentd-async-connect: 'true'
+                fluentd-retry-wait: '1s'
+                fluentd-max-retries: '30'
+                tag: centraldemo.backend.staging
+    elasticsearch:
+        image: docker.elastic.co/elasticsearch/elasticsearch-oss:6.3.0
+        restart: always
+        environment:
+            - 'node.name=log-demo-elastic-search'
+            - 'discovery.type=single-node'
+            - 'bootstrap.memory_lock=true'
+            - 'ES_JAVA_OPTS=-Xms256m -Xmx256m'
+        volumes:
+            - ./elasticsearch/data:/usr/share/elasticsearch/data
+    kibana:
+        image: docker.elastic.co/kibana/kibana-oss:6.3.0
+        restart: always
+        depends_on:
+            - elasticsearch
+    fluentd:
+        image: qqbuby/fluentd:v1.2-es
+        ports:
+            - 127.0.0.1:24224:24224
+        depends_on:
+            - elasticsearch
+        volumes:
+            - ./fluentd/config:/fluentd/etc
+            - ./fluentd/test.log:/tmp/test.log
+        logging:
+            driver: "json-file"
+            options:
+                max-size: "1G"
+                max-file: "2"
