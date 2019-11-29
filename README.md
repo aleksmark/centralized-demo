@@ -38,14 +38,11 @@ $ git clone https://github.com/aleksmark/centralized-demo.git
 $ cd centralized-demo
 ```
 
-**Update hosts file (required to run with sudo user)**
-```
-$ echo "127.0.0.1 development.central.demo" >> /etc/hosts
-$ echo "127.0.0.1 staging.central.demo" >> /etc/hosts
-$ echo "127.0.0.1 kibana.central.demo" >> /etc/hosts
-```
-
 **Build the docker environment**
+
+By default nginx will start on port 80.
+To run on custom port update port binding [here]( https://github.com/aleksmark/centralized-demo/blob/master/docker-compose.yml#L8) => "<CUSTOM_PORT>:80"
+
 ```
 $ docker-compose up -d --build \
     --scale backend-development=3 \
@@ -54,9 +51,16 @@ $ docker-compose up -d --build \
     --scale frontend-staging=3
 ```
 
+**Update hosts file (required to run with sudo user)**
+```
+$ echo "127.0.0.1 development.central.demo" >> /etc/hosts
+$ echo "127.0.0.1 staging.central.demo" >> /etc/hosts
+$ echo "127.0.0.1 kibana.central.demo" >> /etc/hosts
+```
+
 **Create index pattern**
 
-Follow the [documentation](https://www.elastic.co/guide/en/kibana/6.3/tutorial-define-index.html#tutorial-define-index) to create index pattern with name `fluend`
+Go to http://kibana.central.demo and follow the [documentation](https://www.elastic.co/guide/en/kibana/6.3/tutorial-define-index.html#tutorial-define-index) to create index pattern with name `fluend`
 
 ## Usage
 
