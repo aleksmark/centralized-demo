@@ -1,4 +1,10 @@
+## What is the centralized logging?
+
+Check this ![presentation](centralized_logging.pdf) for more info on centralized logging in general.
+
 ## Multi-environment scalable microservices system with centralized logging
+
+This project has source code to build the third infrastructure from the presentation.<br/><br/>
 
 Nginx to route all the incoming trafic.<br/>
 Frontend and backend application with minimal codebase to demonstate application logging.<br/>
