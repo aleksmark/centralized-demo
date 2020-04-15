@@ -1,6 +1,6 @@
 ## What is the centralized logging?
 
-Check this ![presentation](centralized_logging.pdf) for more info on centralized logging in general.
+Check this [presentation](centralized_logging.pdf) for more info on centralized logging in general.
 
 ## Multi-environment scalable microservices system with centralized logging
 
